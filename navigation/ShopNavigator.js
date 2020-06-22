@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import ProductDetails from '../screens/shop/ProductDetails';
 import ProductsOverview from '../screens/shop/ProductsOverview';
+import Cart from '../screens/shop/Cart'
 
 import Colors  from '../constants/Colors'
 console.log("wht is in colors: ", Colors);
@@ -80,6 +81,16 @@ const Main = () => {
                             headerTintColor: Platform.OS === "android" ? "#fff" : Colors.accent
                         })
                     }
+                />
+                <ProductsNavigator.Screen 
+                    name="Cart"
+                    component={Cart}
+                    options={{
+                        headerStyle: {
+                            backgroundColor: Platform.OS === 'android'  ? Colors.primary : '#fff'
+                        },
+                        headerTintColor: Platform.OS === "android" ? "#fff" : Colors.accent
+                    }}
                 />
             </ProductsNavigator.Navigator>
         </NavigationContainer>
