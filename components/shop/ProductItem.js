@@ -81,10 +81,12 @@ const styles = StyleSheet.create({
         padding: 10
     },
     title: {
+        fontFamily: 'open-sans-bold',
         fontSize: 18,
-        marginVertical: 3
+        marginVertical: 2
     },
     price: {
+        fontFamily: 'open-sans',
         fontSize: 18,
         color: '#888'
     },

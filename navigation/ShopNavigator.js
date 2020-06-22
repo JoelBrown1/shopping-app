@@ -27,17 +27,38 @@ const Main = () => {
         <NavigationContainer
             screenOptions={defaultScreenOptions}
         >
-            <ProductsNavigator.Navigator>
+            <ProductsNavigator.Navigator
+                screenOptions={{
+                    headerStyle: {
+                        backgroundColor: Platform.OS === "android" ? Colors.primary : '#fff',
+                    },
+                    headerTitleStyle: {
+                        fontFamily: 'open-sans-bold',
+                    },
+                    headerBackTitleStyle: {
+                        fontFamily: 'open-sans',
+                        fontSize: 14
+                    },
+                    headerTintColor: Platform.OS === "android" ? "#fff" : Colors.accent
+                }}
+            >
             <ProductsNavigator.Screen 
                     name="Products"
                     component={ProductsOverview}
                     options={
                         {
                             title: 'All Products',
-                            headerStyle: {
-                                backgroundColor: Platform.OS === "android" ? Colors.primary : '#fff'
-                            },
-                            headerTintColor: Platform.OS === "android" ? "#fff" : Colors.accent
+                            // headerStyle: {
+                            //     backgroundColor: Platform.OS === "android" ? Colors.primary : '#fff',
+                            // },
+                            // headerTitleStyle: {
+                            //     fontFamily: 'open-sans-bold',
+                            // },
+                            // headerBackTitleStyle: {
+                            //     fontFamily: 'open-sans-bold',
+                            //     color: Colors.primary
+                            // },
+                            // headerTintColor: Platform.OS === "android" ? "#fff" : Colors.accent
                         }
                     }
                 />
