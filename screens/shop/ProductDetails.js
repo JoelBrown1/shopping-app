@@ -8,12 +8,16 @@ import {
     Platform, 
     StyleSheet 
 } from 'react-native';
-import { useSelector } from 'react-redux';
-import Colors from '../../constants/Colors'
+import { useSelector, useDispatch } from 'react-redux';
+import * as cartActions from '../../store/actions/cart';
+import Colors from '../../constants/Colors';
 
 const ProductDetails = (props) => {
     const { productId } = props.route.params;
     const { navigation } = props
+
+    const dispatch = useDispatch()
+
     const selectedProduct = useSelector(state => state.products.availableProducts.find(prod => prod.id === productId));
     
     /**
@@ -28,7 +32,12 @@ const ProductDetails = (props) => {
         <ScrollView>
             <Image style={styles.prodImage} source={{uri:selectedProduct.imageUrl}}/>
             <View style={styles.buttonContainer}>
-                <Button title="add to cart" color={Platform.OS==='android' ? Colors.primary : Colors.primary} onPress={() => {console.log('add the product to cart')}}/>
+                <Button 
+                    title="add to cart" 
+                    color={Platform.OS==='android' ? Colors.primary : Colors.primary} 
+                    onPress={() => {
+                        dispatch(cartActions.addToCart(selectedProduct));
+                    }}/>
             </View>
             <Text style={styles.price}>${selectedProduct.price.toFixed(2)}</Text>
             <Text style={styles.description}>{selectedProduct.description}</Text>
