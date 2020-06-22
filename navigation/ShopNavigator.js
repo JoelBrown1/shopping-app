@@ -1,7 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { Platform } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack';
+
+import ProductDetails from '../screens/shop/ProductDetails';
 import ProductsOverview from '../screens/shop/ProductsOverview';
 
 import Colors  from '../constants/Colors'
@@ -26,7 +28,7 @@ const Main = () => {
             screenOptions={defaultScreenOptions}
         >
             <ProductsNavigator.Navigator>
-                <ProductsNavigator.Screen 
+            <ProductsNavigator.Screen 
                     name="Products"
                     component={ProductsOverview}
                     options={
@@ -37,6 +39,25 @@ const Main = () => {
                             },
                             headerTintColor: Platform.OS === "android" ? "#fff" : Colors.accent
                         }
+                    }
+                />
+                <ProductsNavigator.Screen 
+                    name="ProductDetails"
+                    component={ProductDetails}
+                    options={
+                        /**
+                         * you can configure the header to take properties like "title" from the
+                         * route property.
+                         * this is set when the route is called - in this case from the ProductsOverview screen
+                         * where we pass params for each product through the viewDetails function
+                         */
+                        ({ route }) => ({
+                            title: route.params.title,
+                            headerStyle: {
+                                backgroundColor: Platform.OS === "android" ? Colors.primary : '#fff'
+                            },
+                            headerTintColor: Platform.OS === "android" ? "#fff" : Colors.accent
+                        })
                     }
                 />
             </ProductsNavigator.Navigator>
