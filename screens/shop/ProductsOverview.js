@@ -3,8 +3,8 @@ import { FlatList, StyleSheet, Platform } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 
-import ProductItem from '../../components/shop/ProductItem';
 import CustomHeaderButton from '../../components/UI/HeaderButton'
+import ProductItem from '../../components/shop/ProductItem';
 
 import * as cartActions from '../../store/actions/cart'
 
@@ -34,8 +34,22 @@ const ProductsOverview = (props) => {
                         />
                     </HeaderButtons>
                 )
-            }
-        })
+            },
+            headerLeft: () => {
+                return (
+                    <HeaderButtons 
+                        HeaderButtonComponent={CustomHeaderButton}
+                    >
+                        <Item 
+                            title='Orders' 
+                            iconName={Platform.OS === 'android' ? 'md-menu': 'ios-menu'}
+                            onPress={() => {
+                                navigation.toggleDrawer()
+                            }}
+                        />
+                    </HeaderButtons>
+                )
+            },        })
         // return () => {
         //     cleanup
         // };
