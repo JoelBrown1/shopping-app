@@ -8,6 +8,7 @@ import {
     StyleSheet } from 'react-native';
 import Colors from '../../constants/Colors';
 import * as cartActions from '../../store/actions/cart'
+import * as ordersActions from '../../store/actions/orders'
 
 import CartItem from '../../components/shop/CartItem'
 
@@ -37,7 +38,7 @@ const Cart = () => {
                     color={Colors.accent}
                     title="order now" 
                     onPress={() => {
-                        console.log("order now was pressed");
+                        dispatch( ordersActions.addOrder(cartItems, cartTotalAmount ) )
                     }}
                     disabled={cartItems.length === 0}
                 />
