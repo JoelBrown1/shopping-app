@@ -1,15 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button,
     Text,
     View, 
     StyleSheet 
 } from 'react-native';
-import { Platform } from 'react-native'
-import Colors from '../../constants/Colors'
+import { Platform } from 'react-native';
+import CartItem from '../../components/shop/CartItem'
+import Colors from '../../constants/Colors';
 
 const OrderItem = (props) => {
-    const {amount, date} = props;
-    console.log("looking for date obj: ", date);
+    const {amount, date, items } = props;
+    const [ showDetails, setShowDetails ] = useState(false);
+    console.log("this is the value of showDetails: ", showDetails);
+    
     return (
         <View style={styles.orderItem}>
             <View style={styles.summary}>
@@ -17,10 +20,25 @@ const OrderItem = (props) => {
                 <Text style={styles.orderDate}>{date}</Text>
             </View>
             <Button 
-                title="show" 
-                onPress={() => {console.log('show button was pressed')}}
+                title={showDetails ? "Hide Details" : "Show Details" }
+                onPress={() => {
+                    setShowDetails( prevState => !prevState)
+                }}
                 color={ Colors.primary }
             />
+            { showDetails && <View style={styles.detailItem}>
+                    {items.map( cartItem => {
+                        console.log('this is the cart item: ', cartItem)
+                        return (<CartItem 
+                            key={cartItem.key}
+                            title={cartItem.title} 
+                            sum={cartItem.sum} 
+                            quantity={cartItem.quantity}
+                            deletable={false}
+                        />)
+                    })}
+                </View>
+            }
         </View>
     )
 }
@@ -53,6 +71,9 @@ const styles = StyleSheet.create({
         fontFamily: 'open-sans',
         fontSize: 16,
         color: "#888"
+    },
+    detailItem: {
+        width: "100%"
     }
 })
 
