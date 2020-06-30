@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 
 import CustomHeaderButton from '../../components/UI/HeaderButton'
+import OrderItem from '../../components/shop/OrderItem'
 
 const Orders = (props) => {
     const { navigation } = props;
@@ -46,7 +47,10 @@ const Orders = (props) => {
         displayed = <FlatList 
             data={orders}
             keyExtractor={ item => item.id }
-            renderItem={(itemData) => <Text>{itemData.item.totalAmount}</Text>}
+            renderItem={(itemData) => {
+                console.log('what is in the itemData object: ', itemData.item);
+                return <OrderItem date={itemData.item.readableDate} amount={itemData.item.totalAmount}/>
+            }}
         />
     }
 
