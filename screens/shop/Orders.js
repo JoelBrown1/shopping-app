@@ -49,7 +49,11 @@ const Orders = (props) => {
             keyExtractor={ item => item.id }
             renderItem={(itemData) => {
                 console.log('what is in the itemData object: ', itemData.item);
-                return <OrderItem date={itemData.item.readableDate} amount={itemData.item.totalAmount}/>
+                return (<OrderItem 
+                    date={itemData.item.readableDate} 
+                    amount={itemData.item.totalAmount} 
+                    items={itemData.item.cartItems} 
+                />)
             }}
         />
     }

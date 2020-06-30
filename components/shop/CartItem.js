@@ -10,7 +10,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useLinkProps } from '@react-navigation/native';
 
 const CartItem = (props) => {
-    const {title, price, quantity} = props;
+    const {deletable, sum, title, quantity} = props;
     return (
         <View style={styles.cartItem}>
             <View style={styles.itemData}>
@@ -18,9 +18,9 @@ const CartItem = (props) => {
                 <Text style={styles.data}>{title}</Text>
             </View>
             <View style={styles.itemData}>
-                <Text style={styles.data}>${price.toFixed(2)}</Text>
-                <TouchableOpacity
-                    onPress={props.onRemove}
+                <Text style={styles.data}>${sum.toFixed(2)}</Text>
+                {deletable && <TouchableOpacity
+                    onPress  ={props.onRemove}
                     style={styles.trashContainer}
                 >
                     <Ionicons 
@@ -28,7 +28,7 @@ const CartItem = (props) => {
                         size={23}
                         color="red"
                     />
-                </TouchableOpacity>
+                </TouchableOpacity>}
             </View>
         </View>
     )

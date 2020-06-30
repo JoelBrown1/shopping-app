@@ -48,8 +48,9 @@ const Cart = () => {
                 keyExtractor={item => item.key}
                 renderItem={ itemData => <CartItem
                     title={itemData.item.title}
-                    price={itemData.item.sum}
+                    sum={itemData.item.sum}
                     quantity={itemData.item.quantity}
+                    deletable={true}
                     onRemove={() => {
                         dispatch(cartActions.removeFromCart(itemData.item.key))
                     }}
