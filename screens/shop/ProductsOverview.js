@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react';
-import { FlatList, StyleSheet, Platform } from 'react-native';
+import { Button, FlatList, StyleSheet, Platform } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 
@@ -7,11 +7,9 @@ import CustomHeaderButton from '../../components/UI/HeaderButton'
 import ProductItem from '../../components/shop/ProductItem';
 
 import * as cartActions from '../../store/actions/cart'
+import Colors from '../../constants/Colors'
 
 const ProductsOverview = (props) => {
-    const { navigation } = props;
-    const products = useSelector(state => state.products.availableProducts);
-
     /**
      * set the header options for the page
      */
@@ -54,9 +52,20 @@ const ProductsOverview = (props) => {
         //     cleanup
         // };
     }, [navigation])
-    navigation.setOptions({
+    
 
-    })
+    const { navigation } = props;
+    const products = useSelector(state => state.products.availableProducts);
+
+    const selectItemHandler = (productId, title) => {
+        navigation.navigate({
+            name: 'ProductDetails',
+            params: {
+                productId: productId,
+                title: title
+            }
+        })
+    }
 
     const dispatch = useDispatch();
     return (
@@ -67,17 +76,17 @@ const ProductsOverview = (props) => {
                 image={itemData.item.imageUrl}
                 title={itemData.item.title}
                 price={itemData.item.price}
-                onViewDetails={()=>{navigation.navigate({
-                    name: 'ProductDetails',
-                    params: {
-                        productId: itemData.item.id,
-                        title: itemData.item.title
-                    }
-                })}}
-                onAddToCart={()=>{
-                    dispatch(cartActions.addToCart(itemData.item));
+                onSelect={()=>{
+                    selectItemHandler(itemData.item.id, itemData.item.title)
                 }}
-            />}
+            >
+                <Button color={Colors.primary} title="View Details" onPress={()=>{
+                    selectItemHandler(itemData.item.id, itemData.item.title)
+                }}/>
+                <Button color={Colors.primary} title="Add To Cart" onPress={()=>{
+                    dispatch(cartActions.addToCart(itemData.item));
+                }}/>
+            </ProductItem>}
         />
     )
 }
