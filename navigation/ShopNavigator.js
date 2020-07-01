@@ -172,7 +172,7 @@ const ShopNavigator = () => {
                     }}
                 />
                 <DrawerNavigator.Screen 
-                    name="User Products"
+                    name="Admin"
                     component={AdminNav}
                     options={{
                         drawerIcon: (drawerConfig) => <Ionicons 
