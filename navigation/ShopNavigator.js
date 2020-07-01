@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer'
 
 import ProductDetails from '../screens/shop/ProductDetails';
+import UserProducts from '../screens/user/UserProducts';
 import ProductsOverview from '../screens/shop/ProductsOverview';
 import Cart from '../screens/shop/Cart';
 import Orders from '../screens/shop/Orders';
@@ -12,7 +13,6 @@ import Orders from '../screens/shop/Orders';
 import { Ionicons } from '@expo/vector-icons';
 
 import Colors  from '../constants/Colors'
-console.log("wht is in colors: ", Colors);
 
 const ProductsNavigator = createStackNavigator();
 const OrdersNavigator = createStackNavigator();
@@ -114,6 +114,22 @@ const OrdersNav = () => {
     )
 }
 
+const AdminNav = () => {
+    return(
+        <OrdersNavigator.Navigator
+            
+        >
+            <OrdersNavigator.Screen 
+                name="UserProducts"
+                component={UserProducts}
+                options={{
+                    title: 'User Products',
+                }}
+            />
+        </OrdersNavigator.Navigator>
+    )
+}
+
 const ShopNavigator = () => {
     return (
         <NavigationContainer
@@ -149,6 +165,18 @@ const ShopNavigator = () => {
                     options={{
                         drawerIcon: (drawerConfig) => <Ionicons 
                             name={Platform.OS === 'android' ? 'md-list' : 'ios-list'}
+                            size={23}
+                            color={drawerConfig.activeTintColor}
+                        /> ,
+                        activeTintColor: Colors.primary
+                    }}
+                />
+                <DrawerNavigator.Screen 
+                    name="User Products"
+                    component={AdminNav}
+                    options={{
+                        drawerIcon: (drawerConfig) => <Ionicons 
+                            name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
                             size={23}
                             color={drawerConfig.activeTintColor}
                         /> ,
