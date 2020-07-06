@@ -33,7 +33,7 @@ const Cart = () => {
     return (
         <View style={styles.screen}>
             <View style={styles.summary}>
-                <Text style={styles.summaryText}>Total: <Text style={styles.summaryAmount }>${cartTotalAmount.toFixed(2)}</Text></Text>
+                <Text style={styles.summaryText}>Total: <Text style={styles.summaryAmount }>${Math.round(cartTotalAmount.toFixed(2) * 100 / 100)}</Text></Text>
                 <Button 
                     color={Colors.accent}
                     title="order now" 

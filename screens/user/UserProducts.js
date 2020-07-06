@@ -14,6 +14,19 @@ const UserProducts = (props) => {
     const { navigation } = props;
     const userProducts = useSelector(state => state.products.userProducts)
 
+    const editProduct = (prodId, prodTitle='') => {
+        console.log("this is the title prop: ", prodTitle);
+        navigation.navigate(
+            {
+                name: 'EditProducts', 
+                params: {
+                    productId: prodId,
+                    title: prodTitle !== '' ? `Edit ${prodTitle}` : "Add Product"
+                }
+            }
+        )
+    }
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerLeft: () => {
@@ -30,7 +43,30 @@ const UserProducts = (props) => {
                         />
                     </HeaderButtons>
                 )
-            },        })
+            },
+            headerRight: () => {
+                return (
+                    <HeaderButtons 
+                            HeaderButtonComponent={CustomHeaderButton}
+                    >
+                        <Item 
+                            title='Add Products' 
+                            iconName={Platform.OS === 'android' ? 'md-create': 'ios-create'}
+                            onPress={() => {
+                                navigation.navigate(
+                                    {
+                                        name:'EditProducts',
+                                        params: {
+                                            title: 'Add Product'
+                                        }
+                                    }
+                                )
+                            }}
+                        />
+                    </HeaderButtons>
+                )
+            }
+        })
         // return () => {
         //     cleanup
         // };
@@ -50,11 +86,11 @@ const UserProducts = (props) => {
                 title={itemData.item.title}
                 price={itemData.item.price}
                 onSelect={()=>{
-                    selectItemHandler(itemData.item.id, itemData.item.title)
+                    editProduct(itemData.item.id, itemData.item.title)
                 }}
             >
                 <Button color={Colors.primary} title="Edit Item" onPress={()=>{
-                    console.log('deleting the item')
+                    editProduct(itemData.item.id, itemData.item.title)
                 }}/>
                 <Button color={Colors.primary} title="Delete item" onPress={()=>{
                     dispatch(productActions.deleteProduct(itemData.item.id));
