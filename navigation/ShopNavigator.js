@@ -6,6 +6,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 
 import ProductDetails from '../screens/shop/ProductDetails';
 import UserProducts from '../screens/user/UserProducts';
+import EditProducts from '../screens/user/EditProducts';
 import ProductsOverview from '../screens/shop/ProductsOverview';
 import Cart from '../screens/shop/Cart';
 import Orders from '../screens/shop/Orders';
@@ -16,6 +17,7 @@ import Colors  from '../constants/Colors'
 
 const ProductsNavigator = createStackNavigator();
 const OrdersNavigator = createStackNavigator();
+const AdminNavigator = createStackNavigator();
 const DrawerNavigator = createDrawerNavigator();
 
 const defaultScreenOptions = {
@@ -116,17 +118,29 @@ const OrdersNav = () => {
 
 const AdminNav = () => {
     return(
-        <OrdersNavigator.Navigator
+        <AdminNavigator.Navigator
             
         >
-            <OrdersNavigator.Screen 
+            <AdminNavigator.Screen 
                 name="UserProducts"
                 component={UserProducts}
                 options={{
                     title: 'User Products',
                 }}
             />
-        </OrdersNavigator.Navigator>
+            <AdminNavigator.Screen 
+                name="EditProducts"
+                component={EditProducts}
+                options={({ route }) => (
+                    {
+                    title: route.params.title,
+                    headerStyle: {
+                        backgroundColor: Platform.OS === "android" ? Colors.primary : '#fff'
+                    },
+                    headerTintColor: Platform.OS === "android" ? "#fff" : Colors.accent
+                })}
+            />
+        </AdminNavigator.Navigator>
     )
 }
 
