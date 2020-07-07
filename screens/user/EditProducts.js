@@ -1,24 +1,33 @@
 import React, { useState, useLayoutEffect } from 'react'
 import { Platform, ScrollView, Text, TextInput, View, StyleSheet } from 'react-native'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import * as productActions from '../../store/actions/products'
 
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
-
 import CustomHeaderButton from '../../components/UI/HeaderButton'
 
 const EditProducts = (props) => {
   const {navigation, route} = props;
   
   const prodId = route.params.productId;
-  
   const modifiedProd = useSelector(state => state.products.userProducts.find( prod => prod.id === prodId))
-  console.log("this is the product we are going to modify: ", modifiedProd);
   const [title, setTitle] = useState(modifiedProd ? modifiedProd.title : "");
   const [imageURL, setImageURL] = useState(modifiedProd ? modifiedProd.imageUrl : "");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState(modifiedProd ? modifiedProd.description : "");
 
-  useLayoutEffect(() => {
+  const dispatch = useDispatch();
+
+  const submitHandler = () => {
+    if( modifiedProd ) {
+      dispatch(productActions.updateProduct(prodId, title, description, imageURL))
+    } else {
+      dispatch(productActions.createProduct(title, description, imageURL, +price))
+    }
+  }
+
+  // useLayoutEffect(() => {
     navigation.setOptions(
       {
         headerRight: () => {
@@ -29,16 +38,14 @@ const EditProducts = (props) => {
               <Item 
                   title='Add Products' 
                   iconName={Platform.OS === 'android' ? 'md-checkmark': 'ios-checkmark'}
-                  onPress={() => {
-                    console.log("save all the form data");
-                  }}
+                  onPress={ submitHandler }
               />
             </HeaderButtons>
           )
         }
       }
     )
-  }, [navigation])
+  // }, [navigation, prodId, title, description,price, imageURL])
 
   return (
     <ScrollView>
