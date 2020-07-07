@@ -9,6 +9,8 @@ import {
     StyleSheet 
 } from 'react-native'
 
+import Card from '../UI/Card';
+
 const ProductItem = (props) => {
     let TouchableCmp = TouchableOpacity;
     if(Platform.OS === 'android' && Platform.Version >= 21 ) {
@@ -22,7 +24,7 @@ const ProductItem = (props) => {
      */
 
     return (
-        <View style={styles.product}>
+        <Card style={styles.product}>
             <View style={styles.touchableContainer}>
                 <TouchableCmp onPress={props.onSelect} useForeground>
                     <View>
@@ -39,22 +41,14 @@ const ProductItem = (props) => {
                     </View>
                 </TouchableCmp>
             </View>
-        </View>
+        </Card>
     )
 }
 
 const styles = StyleSheet.create({
     product: {
-        shadowColor: 'black',
-        shadowOpacity: .26,
-        shadowOffset: {width: 0, height: 2},
-        shadowRadius: 8,
-        elevation: 5,
-        borderRadius: 10,
-        backgroundColor: '#fff',
         height: 300,
         margin: 20,
-        
     },
     touchableContainer: {
         borderRadius: 10,

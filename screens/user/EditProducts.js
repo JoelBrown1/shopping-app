@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react'
-import { Platform, ScrollView, Text, TextInput, View, StyleSheet } from 'react-native'
+import {Platform, ScrollView, Text, TextInput, View, StyleSheet } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
 
 import * as productActions from '../../store/actions/products'
@@ -25,9 +25,10 @@ const EditProducts = (props) => {
     } else {
       dispatch(productActions.createProduct(title, description, imageURL, +price))
     }
+    navigation.goBack();
   }
 
-  // useLayoutEffect(() => {
+  useLayoutEffect(() => {
     navigation.setOptions(
       {
         headerRight: () => {
@@ -45,7 +46,7 @@ const EditProducts = (props) => {
         }
       }
     )
-  // }, [navigation, prodId, title, description,price, imageURL])
+  }, [navigation, prodId, title, description,price, imageURL])
 
   return (
     <ScrollView>

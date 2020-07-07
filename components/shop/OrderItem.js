@@ -4,8 +4,8 @@ import { Button,
     View, 
     StyleSheet 
 } from 'react-native';
-import { Platform } from 'react-native';
-import CartItem from '../../components/shop/CartItem'
+import CartItem from '../../components/shop/CartItem';
+import Card from '../UI/Card'
 import Colors from '../../constants/Colors';
 
 const OrderItem = (props) => {
@@ -14,7 +14,7 @@ const OrderItem = (props) => {
     console.log("this is the value of showDetails: ", showDetails);
     
     return (
-        <View style={styles.orderItem}>
+        <Card style={styles.orderItem}>
             <View style={styles.summary}>
                 <Text style={styles.orderAmount}>$ {amount.toFixed(2)}</Text>
                 <Text style={styles.orderDate}>{date}</Text>
@@ -39,19 +39,12 @@ const OrderItem = (props) => {
                     })}
                 </View>
             }
-        </View>
+        </Card>
     )
 }
 
 const styles = StyleSheet.create({
     orderItem: {
-        shadowColor: 'black',
-        shadowOpacity: .26,
-        shadowOffset: {width: 0, height: 2},
-        shadowRadius: 8,
-        elevation: 5,
-        borderRadius: 10,
-        backgroundColor: '#fff',
         margin: 20,
         padding: 10,
         alignItems: 'center'

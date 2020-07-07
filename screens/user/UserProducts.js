@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react'
-import { Button, FlatList, Platform } from 'react-native';
+import { Alert, Button, FlatList, Platform } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux'
 import ProductItem from '../../components/shop/ProductItem'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
@@ -72,6 +72,28 @@ const UserProducts = (props) => {
         // };
     }, [navigation])
 
+    const deleteHandler = (id) => {
+        console.log('inside the deleteHandler...');
+        Alert.alert(
+            "Are you sure,",
+            "do you really want to delete this product?",
+            [
+                {
+                    text: 'No', 
+                    style: 'default'
+                },
+                { 
+                    text: 'Yes', 
+                    style: 'destructive', 
+                    onPress: () => {dispatch(productActions.deleteProduct(id))} 
+                }
+            ],
+            { cancelable: false }
+        );
+    }
+    
+    
+
     const selectItemHandler = (productId, title) => {
         console.log(`selected ${productId} - ${title}`)
     }
@@ -92,9 +114,7 @@ const UserProducts = (props) => {
                 <Button color={Colors.primary} title="Edit Item" onPress={()=>{
                     editProduct(itemData.item.id, itemData.item.title)
                 }}/>
-                <Button color={Colors.primary} title="Delete item" onPress={()=>{
-                    dispatch(productActions.deleteProduct(itemData.item.id));
-                }}/>
+                <Button color={Colors.primary} title="Delete item" onPress={deleteHandler.bind(this, itemData.item.id)}/>
             </ProductItem>
             }
         />
