@@ -7,7 +7,6 @@ import {
     Platform
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'
-import { useLinkProps } from '@react-navigation/native';
 
 const CartItem = (props) => {
     const {deletable, sum, title, quantity} = props;
