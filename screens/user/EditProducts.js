@@ -1,5 +1,5 @@
-import React, { useState, useLayoutEffect, useReducer, useCallback } from 'react'
-import { Alert, Platform, ScrollView, Text, TextInput, View, StyleSheet } from 'react-native'
+import React, { useLayoutEffect, useReducer, useCallback } from 'react'
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
 
 import * as productActions from '../../store/actions/products'
@@ -132,69 +132,78 @@ const EditProducts = (props) => {
   )
 
   return (
-    <ScrollView>
-      <View style={styles.form}>
-        <Input 
-          id='title'
-          autoCapitalize='sentences'
-          autoCorrect
-          keyboardType='default'
-          returnKeyType='next'
-          label='Title'
-          errorText="Please enter a valid title"
-          onInputChanged={inputChangedHandler}
-          initialValue={modifiedProd ? modifiedProd.title : ""}
-          initiallyValid={modifiedProd ? true : false}
-          required
-        />
-        <Input 
-          id='imageUrl'
-          label='Image URL'
-          errorText="Please enter a valid image url"
-          keyboardType='default'
-          returnKeyType='next'
-          onInputChanged={inputChangedHandler}
-          initialValue={modifiedProd ? modifiedProd.imageUrl : ""}
-          initiallyValid={modifiedProd ? true : false}
-          required
-        />
-
-        { modifiedProd ? null : (
-          <Input
-            id='price'
-            label='Price'
-            errorText="Please enter a valid price"
-            keyboardType='decimal-pad'
+    <KeyboardAvoidingView 
+      style={styles.keyboardAvoid}
+      behavior="padding" 
+      keyboardVerticalOffset={100}
+    >
+      <ScrollView>
+        <View style={styles.form}>
+          <Input 
+            id='title'
+            autoCapitalize='sentences'
+            autoCorrect
+            keyboardType='default'
             returnKeyType='next'
+            label='Title'
+            errorText="Please enter a valid title"
             onInputChanged={inputChangedHandler}
-            initialValue={modifiedProd ? modifiedProd.proce : ""}
+            initialValue={modifiedProd ? modifiedProd.title : ""}
             initiallyValid={modifiedProd ? true : false}
             required
-            min={0.1}
           />
-        )}
-        <Input 
-          id='description'
-          label='Description'
-          errorText="Please enter a valid description"
-          keyboardType='default'
-          returnKeyType='next'
-          autoCapitalize='sentences'
-          autoCorrect
-          multiline
-          numberOfLines={3}
-          onInputChanged={inputChangedHandler}
-          initialValue={modifiedProd ? modifiedProd.description : ""}
-          initiallyValid={modifiedProd ? true : false}
-          required
-          minLength={5}
-        />
-      </View> 
-    </ScrollView>
+          <Input 
+            id='imageUrl'
+            label='Image URL'
+            errorText="Please enter a valid image url"
+            keyboardType='default'
+            returnKeyType='next'
+            onInputChanged={inputChangedHandler}
+            initialValue={modifiedProd ? modifiedProd.imageUrl : ""}
+            initiallyValid={modifiedProd ? true : false}
+            required
+          />
+
+          { modifiedProd ? null : (
+            <Input
+              id='price'
+              label='Price'
+              errorText="Please enter a valid price"
+              keyboardType='decimal-pad'
+              returnKeyType='next'
+              onInputChanged={inputChangedHandler}
+              initialValue={modifiedProd ? modifiedProd.proce : ""}
+              initiallyValid={modifiedProd ? true : false}
+              required
+              min={0.1}
+            />
+          )}
+          <Input 
+            id='description'
+            label='Description'
+            errorText="Please enter a valid description"
+            keyboardType='default'
+            returnKeyType='next'
+            autoCapitalize='sentences'
+            autoCorrect
+            multiline
+            numberOfLines={3}
+            onInputChanged={inputChangedHandler}
+            initialValue={modifiedProd ? modifiedProd.description : ""}
+            initiallyValid={modifiedProd ? true : false}
+            required
+            minLength={5}
+          />
+        </View> 
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 
 const styles = StyleSheet.create({
+  keyboardAvoid: {
+    flex: 1
+  },
   form: {
     margin: 20
   },
