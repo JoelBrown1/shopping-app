@@ -1,17 +1,17 @@
-import React, { useReducer, useEffect } from 'react'
-import {  Text, TextInput, View, StyleSheet } from 'react-native'
+import React, { useEffect, useReducer } from 'react'
+import { Text, TextInput, View, StyleSheet } from 'react-native'
 
-const INPUT_CHANGE = "INPUT_CHANGE";
-const INPUT_BLUR = "INPUT_BLUR"
+const INPUT_CHANGED = "INPUT_CHANGED"
+const LOST_FOCUS = "LOST_FOCUS"
 const inputReducer = (state, action) => {
   switch(action.type) {
-    case INPUT_CHANGE:
+    case INPUT_CHANGED:
       return {
         ...state,
         value: action.value,
         isValid: action.isValid
       }
-    case INPUT_BLUR:
+    case LOST_FOCUS:
       return {
         ...state,
         modified: true
@@ -22,68 +22,71 @@ const inputReducer = (state, action) => {
 }
 
 const Input = (props) => {
-  const { initialValue, initiallyValid, label, errorText } = props;
+  const { initialValue, initiallyValid } = props
   const [inputState, dispatch] = useReducer(inputReducer, {
-    value: initialValue ? initialValue : "",
-    isValid: initiallyValid,
+    value: initialValue ? initialValue : '',
+    isValid: initiallyValid ? true : false,
     modified: false
   })
-  console.log("this is the state: ", inputState);
-  
-  const{ id, onInputChanged } = props;
+
+  const { id, onInputChanged } = props
   useEffect(() => {
-    console.log('is useEffect causing the infinite loop')
+    console.log("inputState details: ", inputState);
     if(inputState.modified) {
+      console.log("this should happend if modified is true: ", inputState.modified);
       onInputChanged(id, inputState.value, inputState.isValid)
     }
-  }, [inputState, onInputChanged, id])
+  }, [onInputChanged, inputState, id])
 
-  const textChaneHandler = text => {
-    console.log('do we get the text value: ', text);
+  const{ required, email, min, max, minLength } = props
+  const textChangedHandler = text => {
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let isValid = true;
-    
-    if (props.required && text.trim().length === 0) {
-      console.log('is there a value length: ', text.trim().length)
+    if (required && text.trim().length === 0) {
       isValid = false;
     }
-    if (props.email && !emailRegex.test(text.toLowerCase())) {
+    if (email && !emailRegex.test(text.toLowerCase())) {
       isValid = false;
     }
-    if (props.min != null && +text < props.min) {
+    if (min != null && +text < min) {
       isValid = false;
     }
-    if (props.max != null && +text > props.max) {
+    if (max != null && +text > max) {
       isValid = false;
     }
-    if (props.minLength != null && text.length < props.minLength) {
+    if (minLength != null && text.length < minLength) {
       isValid = false;
     }
 
     dispatch({
-      type: INPUT_CHANGE,
+      type: INPUT_CHANGED,
       value: text,
-      isValid
+      isValid: isValid
     })
   }
 
   const lostFocusHandler = () => {
-    dispatch({ type: INPUT_BLUR })
+    dispatch({
+      type: LOST_FOCUS
+    })
   }
 
+  const { label, errorText } = props;
   return (
     <View style={styles.formControls}>
       <Text style={styles.title}>{label}</Text>
       <TextInput 
-        {...props}
+        { ...props }
         style={styles.input} 
         value={inputState.value} 
-        onChangeText={textChaneHandler}
-        onBlur={lostFocusHandler}
-      />
-      {inputState.modified && !inputState.isValid && <View style={styles.errorContainer}><Text style={styles.error}>{errorText}</Text></View>}
+        onChangeText={textChangedHandler}
+        onFocus={lostFocusHandler}
+        // onBlur={lostFocusHandler}
+        returnKeyType="next"
+        />
+        { !inputState.isValid && <Text>{errorText}</Text> }
     </View>
-  )
+  )  
 }
 
 const styles = StyleSheet.create({
@@ -100,13 +103,9 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ccc",
     borderBottomWidth: 1
   },
-  errorContainer: {
-    marginVertical: 5
-  },
   error: {
-    fontFamily: 'open-sans',
-    fontSize: 13,
     color: 'red',
+    marginVertical: 5
   }
 })
 
