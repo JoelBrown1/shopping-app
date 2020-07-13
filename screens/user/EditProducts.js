@@ -6,6 +6,41 @@ import * as productActions from '../../store/actions/products'
 
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../../components/UI/HeaderButton'
+import Input from '../../components/UI/Input'
+
+const UPDATE_FORM = "UPDATE_FORM";
+const formReducer = (state, action) => {
+  switch(action.type) {
+    case UPDATE_FORM:
+      console.log("formReducer was called");
+      const updatedValues = {
+        ...state.inputValues,
+        [action.input]: action.value
+      }
+      const updatedValidities = {
+        ...state.inputValidities,
+        [action.input]: action.isValid
+      }
+      const updatedInputMods = {
+        ...state.inputMods,
+        [action.input]: true
+      }
+      let formIsValid = true;
+      for (const key in updatedValidities ) {
+        formIsValid = formIsValid && updatedValidities[key];
+      }
+
+      const updatedState = {
+        ...state,
+        inputMods: updatedInputMods,
+        inputValues: updatedValues,
+        inputValidities: updatedValidities,
+        formIsValid
+      }
+
+      return updatedState;
+  }
+}
 
 const UPDATE_FORM = "UPDATE_FORM"
 const formReducer = (state, action) => {
@@ -42,7 +77,6 @@ const EditProducts = (props) => {
   const modifiedProd = useSelector(state => state.products.userProducts.find( prod => prod.id === prodId))
 
   const dispatch = useDispatch();
-
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       title: modifiedProd ? modifiedProd.title : "",
@@ -81,6 +115,7 @@ const EditProducts = (props) => {
     navigation.goBack();
   }, [dispatch, formState, prodId])
 
+
   useLayoutEffect(() => {
     navigation.setOptions(
       {
@@ -99,6 +134,7 @@ const EditProducts = (props) => {
         }
       }
     )
+
   }, [navigation, formState]);
 
   const textChangeHandler = ( id, text ) => {
@@ -164,10 +200,14 @@ const EditProducts = (props) => {
         </View>
       </View> 
     </ScrollView>
+
   )
 }
 
 const styles = StyleSheet.create({
+  keyboardAvoid: {
+    flex: 1
+  },
   form: {
     margin: 20
   },
@@ -183,6 +223,10 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderBottomColor: "#ccc",
     borderBottomWidth: 1
+  },
+  error: {
+    color: 'red',
+    marginVertical: 5
   }
 })
 
