@@ -29,17 +29,19 @@ const Input = (props) => {
     modified: false
   })
 
-  const { id, onInputChanged } = props
+  const { id, onInputChange } = props;
+
   useEffect(() => {
     console.log("inputState details: ", inputState);
     if(inputState.modified) {
       console.log("this should happend if modified is true: ", inputState.modified);
-      onInputChanged(id, inputState.value, inputState.isValid)
+      onInputChange(id, inputState.value, inputState.isValid)
     }
-  }, [onInputChanged, inputState, id])
+  }, [onInputChange, inputState, id])
 
   const{ required, email, min, max, minLength } = props
-  const textChangedHandler = text => {
+
+  const inputTextChangedHandler = text => {
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let isValid = true;
     if (required && text.trim().length === 0) {
@@ -66,9 +68,14 @@ const Input = (props) => {
   }
 
   const lostFocusHandler = () => {
+    console.log("blur event fires")
     dispatch({
       type: LOST_FOCUS
     })
+  }
+
+  const endEditingHandler = () => {
+    console.log('we have ended editing')
   }
 
   const { label, errorText } = props;
@@ -79,12 +86,13 @@ const Input = (props) => {
         { ...props }
         style={styles.input} 
         value={inputState.value} 
-        onChangeText={textChangedHandler}
-        onFocus={lostFocusHandler}
-        // onBlur={lostFocusHandler}
+        onChangeText={inputTextChangedHandler}
+        //onFocus={lostFocusHandler}
+        onBlur={lostFocusHandler}
+        onEndEditing={endEditingHandler}
         returnKeyType="next"
         />
-        { !inputState.isValid && <Text>{errorText}</Text> }
+        { !inputState.isValid && inputState.modified && <View style={styles.errorContainer}><Text style={styles.error}>{errorText}</Text></View> }
     </View>
   )  
 }
@@ -103,9 +111,13 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ccc",
     borderBottomWidth: 1
   },
+  errorContainer: {
+    marginVertical: 5
+  },
   error: {
     color: 'red',
-    marginVertical: 5
+    fontFamily: "open-sans",
+    fontSize: 13
   }
 })
 
