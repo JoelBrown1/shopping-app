@@ -1,5 +1,5 @@
-import React, { useCallback, useLayoutEffect, useReducer } from 'react'
-import {Alert, Platform, ScrollView, Text, TextInput, View, StyleSheet } from 'react-native'
+import React, { useCallback, useEffect, useLayoutEffect, useReducer } from 'react'
+import {Alert, KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
 
 import * as productActions from '../../store/actions/products'
@@ -60,8 +60,8 @@ const EditProducts = (props) => {
   })
 
 
-  const submitHandler = useCallback((data) => {
-    console.log("formState value: ", formState);
+  const submitHandler = useCallback(() => {
+    console.log("submitHandler formState value: ", formState);
     if( !formState.formIsValid ) {
       Alert.alert("Warning", "there is an error", [{text: 'ok'}])
       return;
@@ -69,32 +69,33 @@ const EditProducts = (props) => {
     if( modifiedProd ) {
       dispatch(productActions.updateProduct(
         prodId, 
-        data.inputValues.title, 
-        data.inputValues.description, 
-        data.inputValues.imageUrl))
+        formState.inputValues.title, 
+        formState.inputValues.description, 
+        formState.inputValues.imageUrl))
     } else {
       dispatch(productActions.createProduct(
-        data.inputValues.title, 
-        data.inputValues.description, 
-        data.inputValues.imageUrl, 
-        +data.inputValues.price))
+        formState.inputValues.title, 
+        formState.inputValues.description, 
+        formState.inputValues.imageUrl, 
+        +formState.inputValues.price))
     }
     navigation.goBack();
   }, [dispatch, formState, prodId])
 
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     navigation.setOptions(
       {
         headerRight: () => {
+          console.log("render the header button to submit the form");
           return (
             <HeaderButtons 
-                    HeaderButtonComponent={CustomHeaderButton}
+              HeaderButtonComponent={CustomHeaderButton}
             >
               <Item 
-                  title='Add Products' 
-                  iconName={Platform.OS === 'android' ? 'md-checkmark': 'ios-checkmark'}
-                  onPress={() => submitHandler(formState) }
+                title='Add Products' 
+                iconName={Platform.OS === 'android' ? 'md-checkmark': 'ios-checkmark'}
+                onPress={submitHandler}
               />
             </HeaderButtons>
           )
@@ -102,11 +103,11 @@ const EditProducts = (props) => {
       }
     )
 
-  }, [navigation, formState]);
+  }, [submitHandler, dispatchFormState, formState]);
 
-  const textChangeHandler = useCallback(
+  const inputChangeHandler = useCallback(
     ( id, inputValue, inputValid ) => {
-      console.log("inside the textChangedHandler")
+      console.log("inside the inputChangeHandler")
       console.log("id: ", id)
       console.log("inputvalue: ", inputValue)
       console.log("inputValid: ", inputValid)
@@ -122,60 +123,66 @@ const EditProducts = (props) => {
   )
 
   return (
-    <ScrollView>
-      <View style={styles.form}>
-        <Input 
-          id="title"
-          keyboardType="default"
-          autoCapitalize="sentences"
-          autoCorrect
-          label="Title *"
-          errorText="Please enter a valid title"
-          initialValue={modifiedProd ? modifiedProd.title : ""}
-          initiallyValid={modifiedProd ? true : false}
-          required
-          onInputChanged={textChangeHandler}
-        />
-        
-        <Input 
-          id="imageUrl"
-          keyboardType="default"
-          label="Image Url *"
-          errorText="Please enter a valid Image URL"
-          initialValue={modifiedProd ? modifiedProd.imageUrl : ""}
-          initiallyValid={modifiedProd ? true : false}
-          required
-          onInputChanged={textChangeHandler}
-        />
-        { modifiedProd ? null : (
+    <KeyboardAvoidingView 
+      style={styles.keyboardAvoid}
+      behavior="padding"
+      keyboardVerticalOffset={100}
+    >
+      <ScrollView>
+        <View style={styles.form}>
           <Input 
-            id="price"
-            keyboardType="decimal-pad"
-            label="Price *"
-            errorText="Please enter a valid price"
+            id="title"
+            keyboardType="default"
+            autoCapitalize="sentences"
+            autoCorrect
+            label="Title *"
+            errorText="Please enter a valid title"
+            initialValue={modifiedProd ? modifiedProd.title : ""}
+            initiallyValid={modifiedProd ? true : false}
             required
-            min={0.1}
-            onInputChanged={textChangeHandler}
+            onInputChange={inputChangeHandler}
           />
-        )}
-        <Input 
-          id="description"
-          keyboardType="default"
-          autoCapitalize="sentences"
-          autoCorrect
-          multilie
-          numberOfLines={3}
-          label="Description *"
-          errorText="Please enter a valid description"
-          initialValue={modifiedProd ? modifiedProd.description : ""}
-          initiallyValid={modifiedProd ? true : false}
-          required
-          minLength={5}
-          onInputChanged={textChangeHandler}
-        />
-      </View> 
-    </ScrollView>
-
+          
+          <Input 
+            id="imageUrl"
+            keyboardType="default"
+            label="Image Url *"
+            errorText="Please enter a valid Image URL"
+            initialValue={modifiedProd ? modifiedProd.imageUrl : ""}
+            initiallyValid={modifiedProd ? true : false}
+            required
+            onInputChange={inputChangeHandler}
+          />
+          { modifiedProd ? null : (
+            <Input 
+              id="price"
+              keyboardType="decimal-pad"
+              label="Price *"
+              errorText="Please enter a valid price"
+              required
+              min={0.1}
+              onInputChange={inputChangeHandler}
+              />
+          )}
+          <Input 
+            id="description"
+            keyboardType="default"
+            autoCapitalize="sentences"
+            autoCorrect
+            multilie
+            numberOfLines={3}
+            label="Description *"
+            errorText="Please enter a valid description"
+            initialValue={modifiedProd ? modifiedProd.description : ""}
+            initiallyValid={modifiedProd ? true : false}
+            required
+            minLength={5}
+            onInputChange={inputChangeHandler}
+            blurOnSubmit={true}
+          />
+        </View> 
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 
