@@ -1,5 +1,5 @@
 import PRODUCTS from '../../data/Products';
-import { DELETE_PRODUCT, CREATE_PRODUCT, UPDATE_PRODUCT } from '../actions/products'
+import { DELETE_PRODUCT, CREATE_PRODUCT, UPDATE_PRODUCT, SET_PRODUCTS } from '../actions/products'
 
 import Product from '../../models/productModel';
 
@@ -10,6 +10,13 @@ const initialState= {
 
 export default (state = initialState,  actions) => {
     switch(actions.type) {
+        case SET_PRODUCTS:
+            console.log("inside the set products reducer: ", actions.products);
+            return {
+                ...state,
+                availableProducts: actions.products,
+                userProducts: actions.products.filter( product => product.ownerId === 'u1')
+            }
         case DELETE_PRODUCT:
             const newUserProducts = state.userProducts.filter(product => product.id !== actions.pid)
             const newProducts = state.availableProducts.filter(product => product.id !== actions.pid)
