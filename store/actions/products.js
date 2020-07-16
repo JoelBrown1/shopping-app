@@ -57,30 +57,38 @@ export const createProduct = (title, description, imageUrl, price) => {
 
 export const fetchProducts = () => {
     return async dispatch => {
-        const url = "https://shopping-app-9a925.firebaseio.com/products.json";
-        const response = await fetch(url, {
-            method: 'GET',
-        });
+        try {
+            const url = "https://shopping-app-9a925.firebaseio.com/products.json";
+            const response = await fetch(url, {
+                method: 'GET',
+            });
 
-        const respData = await response.json();
-        const loadedProducts = [];
+            if( !response.ok ) {
+                throw new Error('something went wrong: ', response);
+            }
 
-        for (const key in respData) {
-            loadedProducts.push(
-                new Product(
-                    key, 
-                    'u1', 
-                    respData[key].title,
-                    respData[key].imageUrl,
-                    respData[key].description,
-                    respData[key].price,
+            const respData = await response.json();
+            const loadedProducts = [];
+
+            for (const key in respData) {
+                loadedProducts.push(
+                    new Product(
+                        key, 
+                        'u1', 
+                        respData[key].title,
+                        respData[key].imageUrl,
+                        respData[key].description,
+                        respData[key].price,
+                    )
                 )
-            )
-        }
+            }
 
-        dispatch({
-            type: SET_PRODUCTS,
-            products: loadedProducts
-        })
+            dispatch({
+                type: SET_PRODUCTS,
+                products: loadedProducts
+            })
+        } catch(err) {
+            throw err;
+        }
     }
 }

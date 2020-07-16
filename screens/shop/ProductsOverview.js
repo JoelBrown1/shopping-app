@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useEffect } from 'react';
-import { Button, FlatList, StyleSheet, Platform } from 'react-native';
+import React, { useLayoutEffect, useEffect, useState, useCallback } from 'react';
+import { ActivityIndicator, Button, FlatList, Platform, Text, View, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 
@@ -10,13 +10,25 @@ import * as cartActions from '../../store/actions/cart';
 import * as productActions from '../../store/actions/products';
 import Colors from '../../constants/Colors'
 
+
 const ProductsOverview = (props) => {
-    useEffect(() => {
-        dispatch( productActions.fetchProducts() )
-        return () => {
-            console.log("the cleanup should go here if any is required");
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasError, setHasError] = useState(false);
+
+    const loadProducts = useCallback(async () => {
+        try {
+            setIsLoading(true);
+            await dispatch( productActions.fetchProducts() );
+        } catch(err) {
+            setHasError(true);
         }
-    }, [dispatch]);
+        
+        setIsLoading(false);
+    }, [dispatch, setIsLoading, setHasError])
+    
+    useEffect(() => {
+        loadProducts();
+    }, [dispatch, loadProducts]);
     /**
      * set the header options for the page
      */
@@ -58,8 +70,7 @@ const ProductsOverview = (props) => {
         // return () => {
         //     cleanup
         // };
-    }, [navigation])
-    
+    }, [navigation])    
 
     const { navigation } = props;
     const products = useSelector(state => state.products.availableProducts);
@@ -75,6 +86,28 @@ const ProductsOverview = (props) => {
     }
 
     const dispatch = useDispatch();
+    if(isLoading) {
+        return (
+            <View style={styles.centered}>
+                <ActivityIndicator size="large" color={Colors.primary} />
+            </View>
+        )
+    }
+    if(!isLoading && products.length === 0) {
+        return (
+            <View style={styles.centered}>
+                <Text>No products found</Text>
+            </View>
+        )
+    }
+    if( !isLoading && hasError ) {
+        return (
+            <View style={styles.centered}>
+                <Text>The server isn't responding: please try again later</Text>
+                <Button title="try again" onPress={loadProducts} color={Colors.primary}/>
+            </View>
+        )
+    }
     return (
         <FlatList 
             data={products} 
@@ -99,7 +132,11 @@ const ProductsOverview = (props) => {
 }
 
 const styles = StyleSheet.create({
-
+    centered:{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+    }
 })
 
 export default ProductsOverview
