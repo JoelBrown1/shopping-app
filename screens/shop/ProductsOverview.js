@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useEffect } from 'react';
 import { Button, FlatList, StyleSheet, Platform } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
@@ -6,10 +6,17 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../../components/UI/HeaderButton'
 import ProductItem from '../../components/shop/ProductItem';
 
-import * as cartActions from '../../store/actions/cart'
+import * as cartActions from '../../store/actions/cart';
+import * as productActions from '../../store/actions/products';
 import Colors from '../../constants/Colors'
 
 const ProductsOverview = (props) => {
+    useEffect(() => {
+        dispatch( productActions.fetchProducts() )
+        return () => {
+            console.log("the cleanup should go here if any is required");
+        }
+    }, [dispatch]);
     /**
      * set the header options for the page
      */
@@ -25,9 +32,9 @@ const ProductsOverview = (props) => {
                             title='cart' 
                             iconName={Platform.OS === 'android' ? 'md-cart': 'ios-cart'}
                             onPress={() => {
-                               navigation.navigate(
-                                   'Cart'
-                               )
+                                navigation.navigate(
+                                    'Cart'
+                                )
                             }}
                         />
                     </HeaderButtons>

@@ -1,6 +1,9 @@
+import Product from '../../models/productModel';
+
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const CREATE_PRODUCT = 'CREATE_PRODUCT';
+export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const deleteProduct = productId => { 
     return {
@@ -39,17 +42,45 @@ export const createProduct = (title, description, imageUrl, price) => {
 
         const respData = await response.json()
 
-        console.log('response data: ', respData);
-
         dispatch ({
             type: CREATE_PRODUCT,
             productData: {
-                id: respData.name
+                id: respData.name,
                 title,
                 description,
                 imageUrl,
                 price
             }
+        })
+    }
+}
+
+export const fetchProducts = () => {
+    return async dispatch => {
+        const url = "https://shopping-app-9a925.firebaseio.com/products.json";
+        const response = await fetch(url, {
+            method: 'GET',
+        });
+
+        const respData = await response.json();
+        const loadedProducts = [];
+
+        for (const key in respData) {
+            loadedProducts.push(
+                new Product(
+                    key, 
+                    'u1', 
+                    respData[key].title,
+                    respData[key].imageUrl,
+                    respData[key].description,
+                    respData[key].price,
+                )
+            )
+        }
+
+        dispatch({
+            type: SET_PRODUCTS,
+            products: loadedProducts
         })
     }
 }
