@@ -32,9 +32,7 @@ const Input = (props) => {
   const { id, onInputChange } = props;
 
   useEffect(() => {
-    console.log("inputState details: ", inputState);
     if(inputState.modified) {
-      console.log("this should happend if modified is true: ", inputState.modified);
       onInputChange(id, inputState.value, inputState.isValid)
     }
   }, [onInputChange, inputState, id])
@@ -68,14 +66,13 @@ const Input = (props) => {
   }
 
   const lostFocusHandler = () => {
-    console.log("blur event fires")
     dispatch({
       type: LOST_FOCUS
     })
   }
 
   const endEditingHandler = () => {
-    console.log('we have ended editing')
+
   }
 
   const { label, errorText } = props;

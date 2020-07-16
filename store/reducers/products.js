@@ -11,7 +11,6 @@ const initialState= {
 export default (state = initialState,  actions) => {
     switch(actions.type) {
         case SET_PRODUCTS:
-            console.log("inside the set products reducer: ", actions.products);
             return {
                 ...state,
                 availableProducts: actions.products,
@@ -28,7 +27,7 @@ export default (state = initialState,  actions) => {
 
         case CREATE_PRODUCT:
             const newProduct = new Product(
-                action.productData.id, 
+                actions.productData.id, 
                 'u1', 
                 actions.productData.title,
                 actions.productData.imageUrl,
