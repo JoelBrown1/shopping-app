@@ -1,4 +1,7 @@
+import Order from "../../models/order";
+
 export const ADD_ORDER = 'ADD_ORDER';
+export const SET_ORDERS = "SET_ORDERS";
 
 export const addOrder = (cartItems, totalAmount) => {
     return async dispatch => {
@@ -32,4 +35,39 @@ export const addOrder = (cartItems, totalAmount) => {
             }
         })
     }    
+}
+
+export const fetchOrders = () => {
+    return async dispatch => {
+        try {
+            const url = `https://shopping-app-9a925.firebaseio.com/orders/u1.json`;
+            const response = await fetch(url, {
+                method: "GET"
+            });
+
+            if(!response.ok) {
+                console.log("we didn't get the orders in the actions");
+                throw new Error("didn't get the orders...");
+            }
+
+            const respData = await response.json();
+            const orders = [];
+
+            for(const key in respData) {
+                orders.push(new Order(
+                    key,
+                    respData[key].cartItems,
+                    respData[key].totalAmount,
+                    new Date(respData[key].date),
+                ))
+            }
+
+            dispatch({
+                type: SET_ORDERS,
+                data: orders
+            })
+        } catch (err) {
+            throw err;
+        }
+    }
 }
