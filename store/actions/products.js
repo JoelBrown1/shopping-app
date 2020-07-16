@@ -82,7 +82,7 @@ export const fetchProducts = () => {
                     )
                 )
             }
-
+            console.log("dispatch the SET_PRODUCTS");
             dispatch({
                 type: SET_PRODUCTS,
                 products: loadedProducts

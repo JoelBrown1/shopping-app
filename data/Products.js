@@ -1,5 +1,4 @@
 import Product from '../models/productModel';
-console.log("what is the Product: ", Product);
 
 const PRODUCTS = [
   new Product(

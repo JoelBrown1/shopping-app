@@ -15,8 +15,23 @@ const ProductsOverview = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [hasError, setHasError] = useState(false);
 
+    const { navigation } = props;
+    const products = useSelector(state => state.products.availableProducts);
+
+    const selectItemHandler = (productId, title) => {
+        navigation.navigate({
+            name: 'ProductDetails',
+            params: {
+                productId: productId,
+                title: title
+            }
+        })
+    }
+
     const loadProducts = useCallback(async () => {
         try {
+            console.log('getting the data');
+            setHasError(false);
             setIsLoading(true);
             await dispatch( productActions.fetchProducts() );
         } catch(err) {
@@ -26,9 +41,21 @@ const ProductsOverview = (props) => {
         setIsLoading(false);
     }, [dispatch, setIsLoading, setHasError])
     
+    // useEffect(() => {
+    //     console.log("initial load products call");
+    //     loadProducts();
+    // }, [dispatch, loadProducts]);
+
     useEffect(() => {
-        loadProducts();
-    }, [dispatch, loadProducts]);
+        console.log('inside the listener load products');
+        const willFocusSub = navigation.addListener('focus', loadProducts );
+
+        // cleanup subscriptions to pprevent memory leaks
+        return () => {
+            console.log('cleanup function was called')
+            return willFocusSub;
+        }
+    }, [loadProducts])
     /**
      * set the header options for the page
      */
@@ -72,18 +99,6 @@ const ProductsOverview = (props) => {
         // };
     }, [navigation])    
 
-    const { navigation } = props;
-    const products = useSelector(state => state.products.availableProducts);
-
-    const selectItemHandler = (productId, title) => {
-        navigation.navigate({
-            name: 'ProductDetails',
-            params: {
-                productId: productId,
-                title: title
-            }
-        })
-    }
 
     const dispatch = useDispatch();
     if(isLoading) {
