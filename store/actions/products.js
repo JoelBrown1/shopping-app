@@ -88,7 +88,6 @@ export const fetchProducts = () => {
                 products: loadedProducts
             })
         } catch(err) {
-            console.log('is there an error? ', err);
             throw err;
         }
     }

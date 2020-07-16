@@ -20,7 +20,6 @@ const ProductsOverview = (props) => {
             setIsLoading(true);
             await dispatch( productActions.fetchProducts() );
         } catch(err) {
-            console.log('there was an error: ', err);
             setHasError(true);
         }
         
