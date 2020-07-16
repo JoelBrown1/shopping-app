@@ -165,7 +165,6 @@ const ShopNavigator = () => {
                     component={MainNav}
                     options={{
                         drawerIcon: (drawerConfig) => {
-                            console.log("looking for drawerConfig: ", drawerConfig)
                         return (<Ionicons 
                             name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
                             size={23}
