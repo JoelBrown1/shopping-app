@@ -7,10 +7,15 @@ export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const deleteProduct = productId => { 
     return async dispatch => {
-        const url = `https://shopping-app-9a925.firebaseio.com/products/${productId}.json`;
-        await fetch(url, {
+        const url = `https://shopping-app-9a925.firebaseio.com/products/${productId}.jon`;
+        const response = await fetch(url, {
             method: 'DELETE'
         });
+
+        if(!response.ok) {
+            throw new Error("deleting product failed");
+        }
+
 
         dispatch({
             type: DELETE_PRODUCT,
@@ -22,7 +27,7 @@ export const deleteProduct = productId => {
 export const updateProduct = (pid, title, description, imageUrl) => { 
     return async dispatch => {
         const url = `https://shopping-app-9a925.firebaseio.com/products/${pid}.json`;
-        await fetch(url, {
+        const response = await fetch(url, {
             method: 'PATCH',
             headers: {
                 "Content-Type": "application/json"
@@ -33,6 +38,10 @@ export const updateProduct = (pid, title, description, imageUrl) => {
                 imageUrl, 
             })
         });
+
+        if(!response.ok) {
+            throw new Error("Updating product failed");
+        }
 
         dispatch( {
             type: UPDATE_PRODUCT,
@@ -48,36 +57,37 @@ export const updateProduct = (pid, title, description, imageUrl) => {
 }
 export const createProduct = (title, description, imageUrl, price) => { 
     return async dispatch => {
-        try{
-            const url = "https://shopping-app-9a925.firebaseio.com/products.json";
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    title, 
-                    description, 
-                    imageUrl, 
-                    price
-                })
-            });
-
-            const respData = await response.json();
-
-            dispatch ({
-                type: CREATE_PRODUCT,
-                productData: {
-                    id: respData.name,
-                    title,
-                    description,
-                    imageUrl,
-                    price
-                }
+        const url = "https://shopping-app-9a925.firebaseio.com/products.json";
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title, 
+                description, 
+                imageUrl, 
+                price
             })
-        } catch (err) {
-            throw err;
+        });
+
+        if(!response.ok) {
+            throw new Error("creating product failed");
         }
+
+
+        const respData = await response.json();
+
+        dispatch ({
+            type: CREATE_PRODUCT,
+            productData: {
+                id: respData.name,
+                title,
+                description,
+                imageUrl,
+                price
+            }
+        })
     }
 }
 
