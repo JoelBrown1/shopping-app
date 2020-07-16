@@ -1,16 +1,21 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useCallback, useLayoutEffect, useEffect, useState } from 'react';
 import {
+    ActivityIndicator,
     FlatList,
     Platform,
     Text,
-    View
+    View,
+    StyleSheet
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { HeaderButtons, Item } from 'react-navigation-header-buttons'
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
-import CustomHeaderButton from '../../components/UI/HeaderButton'
-import OrderItem from '../../components/shop/OrderItem'
+import CustomHeaderButton from '../../components/UI/HeaderButton';
+import OrderItem from '../../components/shop/OrderItem';
+
+import * as orderActions from '../../store/actions/orders';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const Orders = (props) => {
     const { navigation } = props;
@@ -18,6 +23,7 @@ const Orders = (props) => {
     let displayed = <View>
         <Text>You have no orders yet</Text>
     </View>
+    const [isLoading, setIsLoading] = useState(false)
     /**
      * set the header options for the page
      */
@@ -41,8 +47,28 @@ const Orders = (props) => {
         // return () => {
         //     cleanup
         // };
-    }, [navigation])
+    }, [navigation]);
 
+    const dispatch = useDispatch();
+
+    const loadOrders = useCallback( async () => {
+        setIsLoading(true);
+        await dispatch(orderActions.fetchOrders());
+        setIsLoading(false);
+    }, [dispatch])
+
+    useEffect(() => {
+        loadOrders();
+        
+    }, [dispatch, loadOrders])
+
+    if( isLoading ) {
+        return (
+            <View style={styles.centered}>
+                <ActivityIndicator size="large" color={Colors.primary} />
+            </View>
+        )
+    }
     if(orders.length > 0) {
         displayed = <FlatList 
             data={orders}
@@ -60,5 +86,12 @@ const Orders = (props) => {
     return displayed
 }
 
+const styles = StyleSheet.create({
+    centered: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+    }
+})
 
 export default Orders
