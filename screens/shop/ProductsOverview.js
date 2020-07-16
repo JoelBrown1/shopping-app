@@ -94,9 +94,6 @@ const ProductsOverview = (props) => {
                     </HeaderButtons>
                 )
             },        })
-        // return () => {
-        //     cleanup
-        // };
     }, [navigation])    
 
 

@@ -26,32 +26,36 @@ export const updateProduct = (pid, title, description, imageUrl) => {
 }
 export const createProduct = (title, description, imageUrl, price) => { 
     return async dispatch => {
-        const url = "https://shopping-app-9a925.firebaseio.com/products.json";
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                title, 
-                description, 
-                imageUrl, 
-                price
+        try{
+            const url = "https://shopping-app-9a925.firebaseio.com/products.json";
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    title, 
+                    description, 
+                    imageUrl, 
+                    price
+                })
+            });
+            const respData = await response.json();
+
+            dispatch ({
+                type: CREATE_PRODUCT,
+                productData: {
+                    id: respData.name,
+                    title,
+                    description,
+                    imageUrl,
+                    price
+                }
             })
-        });
-
-        const respData = await response.json()
-
-        dispatch ({
-            type: CREATE_PRODUCT,
-            productData: {
-                id: respData.name,
-                title,
-                description,
-                imageUrl,
-                price
-            }
-        })
+        } catch(err) {
+            throw err;
+        }
+        
     }
 }
 
@@ -82,7 +86,6 @@ export const fetchProducts = () => {
                     )
                 )
             }
-            console.log("dispatch the SET_PRODUCTS");
             dispatch({
                 type: SET_PRODUCTS,
                 products: loadedProducts
