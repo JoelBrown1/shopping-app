@@ -9,7 +9,6 @@ class Order {
     }
 
     get readableDate() {
-        console.log('what is moment: ', moment(this.date).format('MMMM Do YYYY, hh:mm'));
         return moment(this.date).format('MMMM Do YYYY, hh:mm')
     }
 }

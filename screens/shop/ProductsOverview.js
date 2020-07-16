@@ -30,7 +30,6 @@ const ProductsOverview = (props) => {
 
     const loadProducts = useCallback(async () => {
         try {
-            console.log('getting the data');
             setHasError(false);
             setIsLoading(true);
             await dispatch( productActions.fetchProducts() );
@@ -41,18 +40,15 @@ const ProductsOverview = (props) => {
         setIsLoading(false);
     }, [dispatch, setIsLoading, setHasError])
     
-    // useEffect(() => {
-    //     console.log("initial load products call");
-    //     loadProducts();
-    // }, [dispatch, loadProducts]);
+    useEffect(() => {
+        loadProducts();
+    }, [dispatch, loadProducts]);
 
     useEffect(() => {
-        console.log('inside the listener load products');
         const willFocusSub = navigation.addListener('focus', loadProducts );
 
         // cleanup subscriptions to pprevent memory leaks
         return () => {
-            console.log('cleanup function was called')
             return willFocusSub;
         }
     }, [loadProducts])
@@ -60,7 +56,6 @@ const ProductsOverview = (props) => {
      * set the header options for the page
      */
     useLayoutEffect(() => {
-        console.log("useLayoutEffect was called");
         navigation.setOptions({
             headerRight: () => {
                 return (

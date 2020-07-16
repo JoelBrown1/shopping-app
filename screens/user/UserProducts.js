@@ -15,7 +15,6 @@ const UserProducts = (props) => {
     const userProducts = useSelector(state => state.products.userProducts)
 
     const editProduct = (prodId, prodTitle='') => {
-        console.log("this is the title prop: ", prodTitle);
         navigation.navigate(
             {
                 name: 'EditProducts', 
@@ -73,7 +72,6 @@ const UserProducts = (props) => {
     }, [navigation])
 
     const deleteHandler = (id) => {
-        console.log('inside the deleteHandler...');
         Alert.alert(
             "Are you sure,",
             "do you really want to delete this product?",
@@ -91,12 +89,11 @@ const UserProducts = (props) => {
             { cancelable: false }
         );
     }
-    
-    
 
     const selectItemHandler = (productId, title) => {
-        console.log(`selected ${productId} - ${title}`)
+
     }
+
     const dispatch = useDispatch()
     return (
         <FlatList 

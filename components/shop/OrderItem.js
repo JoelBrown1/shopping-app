@@ -11,7 +11,6 @@ import Colors from '../../constants/Colors';
 const OrderItem = (props) => {
     const {amount, date, items } = props;
     const [ showDetails, setShowDetails ] = useState(false);
-    console.log("this is the value of showDetails: ", showDetails);
     
     return (
         <Card style={styles.orderItem}>
@@ -28,7 +27,6 @@ const OrderItem = (props) => {
             />
             { showDetails && <View style={styles.detailItem}>
                     {items.map( cartItem => {
-                        console.log('this is the cart item: ', cartItem)
                         return (<CartItem 
                             key={cartItem.key}
                             title={cartItem.title} 

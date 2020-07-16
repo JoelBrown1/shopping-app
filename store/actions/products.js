@@ -6,22 +6,44 @@ export const CREATE_PRODUCT = 'CREATE_PRODUCT';
 export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const deleteProduct = productId => { 
-    return {
-        type: DELETE_PRODUCT,
-        pid: productId
+    return async dispatch => {
+        const url = `https://shopping-app-9a925.firebaseio.com/products/${productId}.json`;
+        await fetch(url, {
+            method: 'DELETE'
+        });
+
+        dispatch({
+            type: DELETE_PRODUCT,
+            pid: productId
+        })
     }
 }
 
 export const updateProduct = (pid, title, description, imageUrl) => { 
-    console.log("inside prod actions update roduct")
-    return {
-        type: UPDATE_PRODUCT,
-        productData: {
-            pid,
-            title,
-            description,
-            imageUrl
-        }
+    return async dispatch => {
+        const url = `https://shopping-app-9a925.firebaseio.com/products/${pid}.json`;
+        await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title, 
+                description, 
+                imageUrl, 
+            })
+        });
+
+        dispatch( {
+            type: UPDATE_PRODUCT,
+            productData: {
+                pid,
+                title,
+                description,
+                imageUrl
+            }
+    
+        })
     }
 }
 export const createProduct = (title, description, imageUrl, price) => { 
@@ -40,6 +62,7 @@ export const createProduct = (title, description, imageUrl, price) => {
                     price
                 })
             });
+
             const respData = await response.json();
 
             dispatch ({
@@ -52,10 +75,9 @@ export const createProduct = (title, description, imageUrl, price) => {
                     price
                 }
             })
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
-        
     }
 }
 

@@ -61,7 +61,6 @@ const EditProducts = (props) => {
 
 
   const submitHandler = useCallback(() => {
-    console.log("submitHandler formState value: ", formState);
     if( !formState.formIsValid ) {
       Alert.alert("Warning", "there is an error", [{text: 'ok'}])
       return;
@@ -87,7 +86,6 @@ const EditProducts = (props) => {
     navigation.setOptions(
       {
         headerRight: () => {
-          console.log("render the header button to submit the form");
           return (
             <HeaderButtons 
               HeaderButtonComponent={CustomHeaderButton}
@@ -107,10 +105,6 @@ const EditProducts = (props) => {
 
   const inputChangeHandler = useCallback(
     ( id, inputValue, inputValid ) => {
-      console.log("inside the inputChangeHandler")
-      console.log("id: ", id)
-      console.log("inputvalue: ", inputValue)
-      console.log("inputValid: ", inputValid)
 
       dispatchFormState({
         type: UPDATE_FORM,
