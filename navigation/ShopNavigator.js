@@ -165,7 +165,6 @@ const AdminNav = () => {
 
 const ShopNavigator = () => {
     const authenticated = useSelector(state => state.auth);
-    console.log("looking at the state of authenticated: ", authenticated);
     return (
         <NavigationContainer
             screenOptions={defaultScreenOptions}
