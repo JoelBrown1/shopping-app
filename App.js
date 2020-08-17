@@ -14,11 +14,13 @@ import Main from './navigation/ShopNavigator'
 import productsReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
 import ordersReducer from  './store/reducers/orders';
+import auth from './store/reducers/auth'
 
 const rootReducer = combineReducers({
-  products: productsReducer,
+  auth: auth,
   cart: cartReducer,
-  orders: ordersReducer
+  orders: ordersReducer,
+  products: productsReducer,
 })
 
 const store = createStore( rootReducer, applyMiddleware(ReduxThunk) );

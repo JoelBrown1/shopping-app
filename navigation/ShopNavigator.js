@@ -1,9 +1,11 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { Platform } from 'react-native';
+import { useSelector } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer'
 
+import AuthScreen from '../screens/user/AuthScreen'
 import ProductDetails from '../screens/shop/ProductDetails';
 import UserProducts from '../screens/user/UserProducts';
 import EditProducts from '../screens/user/EditProducts';
@@ -18,6 +20,7 @@ import Colors  from '../constants/Colors'
 const ProductsNavigator = createStackNavigator();
 const OrdersNavigator = createStackNavigator();
 const AdminNavigator = createStackNavigator();
+const AuthenticationNavigator = createStackNavigator();
 const DrawerNavigator = createDrawerNavigator();
 
 const defaultScreenOptions = {
@@ -116,6 +119,22 @@ const OrdersNav = () => {
     )
 }
 
+const AuthenticationNav = () => {
+    return(
+        <AuthenticationNavigator.Navigator
+            
+        >
+            <AuthenticationNavigator.Screen 
+                name="SignIn"
+                component={AuthScreen}
+                options={{
+                    title: 'Sign In',
+                }}
+            />
+        </AuthenticationNavigator.Navigator>
+    )
+}
+
 const AdminNav = () => {
     return(
         <AdminNavigator.Navigator
@@ -145,6 +164,7 @@ const AdminNav = () => {
 }
 
 const ShopNavigator = () => {
+    const authenticated = useSelector(state => state.auth);
     return (
         <NavigationContainer
             screenOptions={defaultScreenOptions}
@@ -184,7 +204,20 @@ const ShopNavigator = () => {
                         activeTintColor: Colors.primary
                     }}
                 />
-                <DrawerNavigator.Screen 
+                { authenticated.token == null ? (
+                    <DrawerNavigator.Screen 
+                        name="SignIN"
+                        component={AuthenticationNav}
+                        options={{
+                            drawerIcon: (drawerConfig) => <Ionicons 
+                                name={Platform.OS === 'android' ? 'md-person' : 'ios-person'}
+                                size={23}
+                                color={drawerConfig.activeTintColor}
+                            /> ,
+                            activeTintColor: Colors.primary
+                        }}
+                    />) : (
+                    <DrawerNavigator.Screen 
                     name="Admin"
                     component={AdminNav}
                     options={{
@@ -195,7 +228,7 @@ const ShopNavigator = () => {
                         /> ,
                         activeTintColor: Colors.primary
                     }}
-                />
+                />)}
             </DrawerNavigator.Navigator>
         </NavigationContainer>
     )
