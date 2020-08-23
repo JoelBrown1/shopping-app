@@ -46,8 +46,6 @@ export const login = (email, password) => {
         });
 
         if(!resp.ok) {
-            const errorResp = await resp.json();
-            const errMessage = errorResp.error.message;
             let message = 'something went wrong in login: ';
             if( errMessage === "EMAIL_NOT_FOUND") {
                 message = `Your email wasn't found!`
@@ -58,7 +56,6 @@ export const login = (email, password) => {
         }
 
         const respData = await resp.json();
-        console.log('login response value: ', respData);
         dispatch({type: LOGIN})
     }
 }
