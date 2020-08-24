@@ -1,9 +1,10 @@
-import { LOGIN, LOGOUT } from '../actions/auth';
+import { LOGIN, LOGOUT, SIGNUP } from '../actions/auth';
 
 const initialState = {
   loggedIn: false,
   isLoading: true,
-  userToke: null
+  userToken: null,
+  userId: null
 }
 
 export default (state = initialState, action) => {
@@ -12,13 +13,21 @@ export default (state = initialState, action) => {
       return {
         ...initialState,
         loggedIn: true,
-        userToke: action.token
+        userToken: action.userToken,
+        userId: action.userId
+      }
+    case SIGNUP:
+      return {
+        ...initialState,
+        loggedIn: true,
+        userToken: action.userToken,
+        userId: action.userId
       }
     case LOGOUT:
       return {
         ...initialState,
         loggedIn: false,
-        userToke: null
+        userToken: null
       }
     default:
       return state;

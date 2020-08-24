@@ -6,8 +6,9 @@ export const CREATE_PRODUCT = 'CREATE_PRODUCT';
 export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const deleteProduct = productId => { 
-    return async dispatch => {
-        const url = `https://shopping-app-9a925.firebaseio.com/products/${productId}.jon`;
+    return async (dispatch, getState) => {
+        const token = getState().auth.userToken;
+        const url = `https://shopping-app-9a925.firebaseio.com/products/${productId}.json?auth=${token}`;
         const response = await fetch(url, {
             method: 'DELETE'
         });
@@ -25,8 +26,11 @@ export const deleteProduct = productId => {
 }
 
 export const updateProduct = (pid, title, description, imageUrl) => { 
-    return async dispatch => {
-        const url = `https://shopping-app-9a925.firebaseio.com/products/${pid}.json`;
+    return async (dispatch, getState) => {
+        console.log('what is in getState: ', getState());
+        console.log('updateProduct - what are the props being passed in: ', title, " : ", description);
+        const token = getState().auth.userToken;
+        const url = `https://shopping-app-9a925.firebaseio.com/products/${pid}.json?auth=${token}`;
         const response = await fetch(url, {
             method: 'PATCH',
             headers: {
@@ -56,8 +60,9 @@ export const updateProduct = (pid, title, description, imageUrl) => {
     }
 }
 export const createProduct = (title, description, imageUrl, price) => { 
-    return async dispatch => {
-        const url = "https://shopping-app-9a925.firebaseio.com/products.json";
+    return async (dispatch, getState) => {
+        const token = getState().auth.userToken;
+        const url = `https://shopping-app-9a925.firebaseio.com/products.json?auth=${token}`;
         const response = await fetch(url, {
             method: 'POST',
             headers: {

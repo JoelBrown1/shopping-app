@@ -28,11 +28,10 @@ export const signup = (email, password) => {
         }
 
         const respData = await resp.json();
-        dispatch({type: SIGNUP})
+        dispatch({type: SIGNUP, userToken: respData.idToken, userId: respData.localId})
     }
 }
 export const login = (email, password) => {
-    console.log('login: email and password:', email, " : ", password);
     return async dispatch => {
         const resp = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC_fkB0og8nyhTNDdgC7SabtSWFBhDRyUY',
         {
@@ -46,6 +45,7 @@ export const login = (email, password) => {
         });
 
         if(!resp.ok) {
+            console.log('error in login flow: ', resp);
             let message = 'something went wrong in login: ';
             if( errMessage === "EMAIL_NOT_FOUND") {
                 message = `Your email wasn't found!`
@@ -56,7 +56,9 @@ export const login = (email, password) => {
         }
 
         const respData = await resp.json();
-        dispatch({type: LOGIN})
+        console.log('what is in the signIn resp:', respData);
+        console.log('this is the signin respons data: ', respData);
+        dispatch({type: LOGIN, userToken: respData.idToken, userId: respData.localId })
     }
 }
 

@@ -165,6 +165,7 @@ const AdminNav = () => {
 
 const ShopNavigator = () => {
     const authenticated = useSelector(state => state.auth);
+    console.log('what is in authenticated: ', authenticated);
     return (
         <NavigationContainer
             screenOptions={defaultScreenOptions}
@@ -204,7 +205,7 @@ const ShopNavigator = () => {
                         activeTintColor: Colors.primary
                     }}
                 />
-                { authenticated.token == null ? (
+                { authenticated.userToken == null ? (
                     <DrawerNavigator.Screen 
                         name="SignIN"
                         component={AuthenticationNav}
