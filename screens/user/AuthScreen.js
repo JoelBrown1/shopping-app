@@ -43,6 +43,7 @@ const formReducer = (state, action) => {
 }
 
 const AuthScreen = (props) => {
+  const { navigation } = props;
   const dispatch = useDispatch();
   const [isSignup, setIsSignup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -78,10 +79,12 @@ const AuthScreen = (props) => {
     setIsLoading(true);
     try{
       await dispatch(action);
+      console.log('what is in navigation: ', navigation);
+      navigation.navigate('Products')
     } catch(err){
       setHasError(err.message);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }
 
   const inputChangeHandler = useCallback(( id, inputValue, inputValid ) => {
