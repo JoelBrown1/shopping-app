@@ -6,8 +6,9 @@ export const SET_ORDERS = "SET_ORDERS";
 export const addOrder = (cartItems, totalAmount) => {
     return async (dispatch, getState) => {
         const token = getState().auth.userToken;
+        const userId = getState().auth.userId;
         const date = new Date()
-        const url = `https://shopping-app-9a925.firebaseio.com/orders/u1.json?auth=${token}`;
+        const url = `https://shopping-app-9a925.firebaseio.com/orders/${userId}.json`;
         const response = await fetch(
             url, {
                 method: 'POST',
@@ -41,8 +42,9 @@ export const addOrder = (cartItems, totalAmount) => {
 export const fetchOrders = () => {
     return async (dispatch, getState) => {
         const token = getState().auth.userToken;
+        const userId = getState().auth.userId;
         try {
-            const url = `https://shopping-app-9a925.firebaseio.com/orders/u1.json?auth=${token}`;
+            const url = `https://shopping-app-9a925.firebaseio.com/orders/${userId}.json`;
             const response = await fetch(url, {
                 method: "GET"
             });

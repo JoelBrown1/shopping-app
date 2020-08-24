@@ -62,6 +62,7 @@ export const updateProduct = (pid, title, description, imageUrl) => {
 export const createProduct = (title, description, imageUrl, price) => { 
     return async (dispatch, getState) => {
         const token = getState().auth.userToken;
+        const userId = getState().auth.userId;
         const url = `https://shopping-app-9a925.firebaseio.com/products.json?auth=${token}`;
         const response = await fetch(url, {
             method: 'POST',
@@ -70,6 +71,7 @@ export const createProduct = (title, description, imageUrl, price) => {
             },
             body: JSON.stringify({
                 title, 
+                ownerId: userId,
                 description, 
                 imageUrl, 
                 price
@@ -90,14 +92,17 @@ export const createProduct = (title, description, imageUrl, price) => {
                 title,
                 description,
                 imageUrl,
-                price
+                price,
+                ownerId: userId
             }
         })
     }
 }
 
 export const fetchProducts = () => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
+        const userId = getState().auth.userId;
+        console.log('this is the userId: ', userId);
         try {
             const url = "https://shopping-app-9a925.firebaseio.com/products.json";
             const response = await fetch(url, {
@@ -112,6 +117,7 @@ export const fetchProducts = () => {
             const loadedProducts = [];
 
             for (const key in respData) {
+                // console.log('what is the product that is being fetched: ', respData[key]);
                 loadedProducts.push(
                     new Product(
                         key, 
@@ -123,9 +129,17 @@ export const fetchProducts = () => {
                     )
                 )
             }
+
+            const userProducts = loadedProducts.filter(prod => { 
+                console.log('product ownerId: ', prod.ownerId);
+                console.log('userId: ', userId);
+                return prod.ownerId === userId
+            });
+            console.log('what is the userProducts: ', userProducts);
             dispatch({
                 type: SET_PRODUCTS,
-                products: loadedProducts
+                products: loadedProducts,
+                userProducts
             })
         } catch(err) {
             throw err;

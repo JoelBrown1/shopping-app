@@ -4,8 +4,8 @@ import { DELETE_PRODUCT, CREATE_PRODUCT, UPDATE_PRODUCT, SET_PRODUCTS } from '..
 import Product from '../../models/productModel';
 
 const initialState= {
-    availableProducts: PRODUCTS,
-    userProducts: PRODUCTS.filter( product => product.ownerId === 'u1')
+    availableProducts: [],
+    userProducts: []
 }
 
 export default (state = initialState,  actions) => {
@@ -14,7 +14,7 @@ export default (state = initialState,  actions) => {
             return {
                 ...state,
                 availableProducts: actions.products,
-                userProducts: actions.products.filter( product => product.ownerId === 'u1')
+                userProducts: actions.userProducts
             }
         case DELETE_PRODUCT:
             const newUserProducts = state.userProducts.filter(product => product.id !== actions.pid)
@@ -28,7 +28,7 @@ export default (state = initialState,  actions) => {
         case CREATE_PRODUCT:
             const newProduct = new Product(
                 actions.productData.id, 
-                'u1', 
+                actions.productData.ownerId,
                 actions.productData.title,
                 actions.productData.imageUrl,
                 actions.productData.description,
