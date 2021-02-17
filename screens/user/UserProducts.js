@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react'
-import { Alert, Button, FlatList, Platform } from 'react-native';
+import { Alert, Button, FlatList, Platform, Text, View, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux'
 import ProductItem from '../../components/shop/ProductItem'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
@@ -94,6 +94,12 @@ const UserProducts = (props) => {
 
     }
 
+    if(userProducts.length === 0) {
+        return (<View style={styels.noProducts}>
+            <Text>No products found... wanna add some?</Text>
+        </View>)
+    }
+
     const dispatch = useDispatch()
     return (
         <FlatList 
@@ -118,6 +124,18 @@ const UserProducts = (props) => {
 
     )
 }
+
+const styels = StyleSheet.create({
+    noProducts: {
+        flex: 1,
+        paddingVertical: 10,
+        marginVertical: 10,
+        borderColor: Colors.primary,
+        borderWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+})
 
 export default UserProducts
 
